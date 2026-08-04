@@ -9,7 +9,6 @@ This is a simple FastAPI application with two endpoints:
 
 - Python 3.7+
 - FastAPI
-- Uvicorn
 
 ## Installation
 
