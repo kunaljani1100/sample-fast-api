@@ -29,12 +29,17 @@ This is a simple FastAPI application with two endpoints:
    pip install fastapi
    ```
 
-## Running the Application
+## Running the Application with Docker
 
-Start the FastAPI application:
-```bash
-fastapi dev fast.py
-```
+1. Build the Docker image:
+   ```bash
+   docker build -t sample-fastapi .
+   ```
+
+2. Run the Docker container:
+   ```bash
+   docker run -p 8000:8000 sample-fast-api
+   ```
 
 The application will be available at `http://127.0.0.1:8000`.
 
