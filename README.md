@@ -70,6 +70,15 @@ The application will be available at `http://127.0.0.1:8000`.
      }
      ```
 
+## API Documentation
+
+FastAPI automatically generates interactive API documentation for your application. You can access it by navigating to the following URL in your browser:
+
+- Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+These interfaces allow you to explore and test your API endpoints directly from the browser.
+
 ## License
 
 This project is licensed under the MIT License.
