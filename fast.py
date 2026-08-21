@@ -1,18 +1,24 @@
 from __future__ import annotations
 
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from motor.motor_asyncio import AsyncIOMotorClient
 
 app = FastAPI()
 
 class Item(BaseModel):
-    name: str = Field(..., min_length=3, max_length=50)
-    price: float = Field(..., gt=0)
+    name: str
+    husband: str
+    age: int
+    weight: int
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello World"}
+MONGO_URI = "mongodb://localhost:27017"
+client = AsyncIOMotorClient(MONGO_URI)
+db = client["StudyStack"]
+collection = db["vidhi"]
 
-@app.post("/items/")
-def create_item(item: Item):
-    return {"item": item}
+@app.post("/items")
+async def create_item(item: Item):
+    await collection.insert_one(item.model_dump())
+    return "success"
+

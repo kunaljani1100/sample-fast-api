@@ -9,7 +9,8 @@ COPY . .
 # Copy the rest of the application code
 COPY . .
 RUN pip install "fastapi[standard]"
+RUN pip install "motor"
 
 EXPOSE 8000
 
-CMD ["uvicorn", "fast:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "marks:app", "--host", "0.0.0.0", "--port", "8000"]
