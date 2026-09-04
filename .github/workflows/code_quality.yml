@@ -81,6 +81,14 @@ jobs:
             --allowedTools "Read,Grep,Glob,Bash(git ls-files:*)"
             --max-turns 50
 
+      - name: Verify Report File
+        if: steps.py-files.outputs.has_files == 'true'
+        run: |
+          if [ ! -f report.json ]; then
+            echo "Error: report.json not found. Exiting."
+            exit 1
+          fi
+
       - name: Save Report as .lok File
         if: steps.py-files.outputs.has_files == 'true'
         run: |
