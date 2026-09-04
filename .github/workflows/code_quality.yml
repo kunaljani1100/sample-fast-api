@@ -3,6 +3,11 @@ name: Claude Code Quality Scan
 # Manually triggered workflow
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name to run the workflow on'
+        required: true
+        default: 'main'
 
 permissions:
   contents: read
