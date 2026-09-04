@@ -1,0 +1,82 @@
+name: Claude Code Quality Scan
+
+# Runs on every push to any branch, and whenever a pull request is opened
+# (or updated) against any branch.
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write   # lets Claude post findings as a PR comment
+  issues: write
+
+jobs:
+  code-quality-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: List Python files to scan
+        id: py-files
+        run: |
+          FILES=$(git ls-files '*.py')
+          if [ -z "$FILES" ]; then
+            echo "No .py files found in repository. Skipping scan."
+            echo "has_files=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_files=true" >> "$GITHUB_OUTPUT"
+            echo "Found the following .py files:"
+            echo "$FILES"
+          fi
+
+      - name: Run Claude code quality scan
+        if: steps.py-files.outputs.has_files == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are performing an automated code quality and security scan.
+
+            Scope: every *.py file tracked in this repository (use Glob/Grep/Read
+            to find and inspect them — do not rely on memory of the repo).
+
+            For each issue you find, classify it into EXACTLY one of these three
+            severity categories, using these definitions verbatim:
+
+            - High: Vulnerabilities that could bring down production systems.
+            - Medium: Vulnerabilities that affect a significant portion of the
+              system.
+            - Low: Vulnerabilities that are cosmetic defects.
+
+            For every finding report:
+            1. File path and line number
+            2. Severity category (High / Medium / Low)
+            3. A short description of the issue
+            4. A brief suggested fix
+
+            Group the findings by severity (High first, then Medium, then Low)
+            and include a one-line summary count of each category at the top.
+
+            Output behavior:
+            - If this run was triggered by a pull request, post the full
+              report as a comment on that pull request.
+            - Always also write the full report to the GitHub Actions step
+              summary (append markdown to the file at $GITHUB_STEP_SUMMARY).
+            - If you find zero issues, still post a short report stating that
+              explicitly, with the High/Medium/Low counts all at zero.
+
+            Do not modify any files — this is a read-only review.
+          claude_args: |
+            --model claude-sonnet-4-6
+            --allowedTools "Read,Grep,Glob,Bash(git ls-files:*)"
+            --max-turns 20
