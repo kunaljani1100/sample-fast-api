@@ -79,7 +79,7 @@ jobs:
           claude_args: |
             --model claude-sonnet-4-6
             --allowedTools "Read,Grep,Glob,Bash(git ls-files:*)"
-            --max-turns 20
+            --max-turns 50
 
       - name: Save Report as .lok File
         if: steps.py-files.outputs.has_files == 'true'
