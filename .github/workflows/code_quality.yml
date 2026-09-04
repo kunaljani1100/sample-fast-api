@@ -1,13 +1,8 @@
 name: Claude Code Quality Scan
 
-# Runs on every push to any branch, and whenever a pull request is opened
-# (or updated) against any branch.
+# Manually triggered workflow
 on:
-  push:
-    branches:
-      - '*'  # Match all branches
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 permissions:
   contents: read
