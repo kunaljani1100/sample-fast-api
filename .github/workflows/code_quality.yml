@@ -80,3 +80,9 @@ jobs:
             --model claude-sonnet-4-6
             --allowedTools "Read,Grep,Glob,Bash(git ls-files:*)"
             --max-turns 50
+
+      - name: Output Execution Log
+        run: |
+          echo "Execution Log Contents:"
+          cat /home/runner/work/_temp/claude-execution-output.json
+
