@@ -2,7 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install dependencies first so Docker can cache this layer
+# Install dependencies first so Docker can cache this layer.
 # (only re-runs if requirements.txt changes, not on every code change)
 COPY . .
 

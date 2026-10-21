@@ -1,5 +1,6 @@
 from contextlib import nullcontext
 from operator import is_not
+from symbol import return_stmt
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
@@ -37,5 +38,9 @@ async def read_root():
 async def create_item(item: Student):
     await collection.insert_one(item.model_dump())
     return "success"
+
+@app.get("/health")
+async def health():
+    return "app is healthy"
 
 
