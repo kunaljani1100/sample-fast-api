@@ -83,6 +83,4 @@ jobs:
 
       - name: Output Execution Log
         run: |
-          echo "Execution Log Contents:"
-          cat /home/runner/work/_temp/claude-execution-output.json
-
+          echo "Execution Log Contents:" && cat /home/runner/work/_temp/claude-execution-output.json && echo "End of Execution Log"
